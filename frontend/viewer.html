@@ -142,7 +142,7 @@
     <script src="/socket.io/socket.io.js" style="display: none"></script>
 
     <script>
-      const socket = io(process.env.URL);
+      const socket = io();
       let index = [1, 1, 1];
       let wrappers = [
         document.getElementById("wrapper1"),
