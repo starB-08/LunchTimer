@@ -41,7 +41,7 @@
 
     <script>
       function next1() {
-        fetch(`http://localhost:3000/nextClass/0`)
+        fetch(process.env.URL + `/nextClass/0`)
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
@@ -49,7 +49,7 @@
           });
       }
       function next2() {
-        fetch(`http://localhost:3000/nextClass/1`)
+        fetch(process.env.URL + `/nextClass/1`)
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
@@ -57,7 +57,7 @@
           });
       }
       function next3() {
-        fetch(`http://localhost:3000/nextClass/2`)
+        fetch(process.env.URL + `/nextClass/2`)
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
@@ -65,7 +65,7 @@
           });
       }
       function readData() {
-        fetch(`http://localhost:3000/read`)
+        fetch(process.env.URL + `/read`)
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
@@ -73,7 +73,7 @@
       }
       function writeData() {
         var _data;
-        fetch(`http://localhost:3000/read`)
+        fetch(process.env.URL + `/read`)
           .then((response) => response.json())
           .then((data) => {
             _data = data;
@@ -90,7 +90,7 @@
 
         const result = `{ "classAmount": ${amount}, "firstClass": ${first} }`;
 
-        fetch(`http://localhost:3000/write/${result}`);
+        fetch(process.env.URL + `/write/${result}`);
       }
     </script>
   </body>
