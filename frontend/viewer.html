@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>급식알리미</title>
+
+    <style>
+      html {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+      }
+      body {
+        display: flex;
+        margin: 0;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100vw;
+        height: 100vh;
+        transform: none;
+        position: absolute;
+        bottom: 0;
+      }
+      #grade1,
+      #grade2,
+      #grade3 {
+        width: 33vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #wrapper1,
+      #wrapper2,
+      #wrapper3 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 50vh;
+        transition: all 0.1s;
+      }
+
+      h1 {
+        font-size: 70px;
+        opacity: 70%;
+        margin: 0;
+        transition: all 0.1s;
+        color: gray;
+        filter: drop-shadow(0 0 10px #88888888);
+      }
+      h1.now {
+        font-size: 200px;
+        opacity: 1;
+      }
+      #wrapper1 h1.now {
+        color: burlywood;
+      }
+      #wrapper2 h1.now {
+        color: skyblue;
+      }
+      #wrapper3 h1.now {
+        color: aquamarine;
+      }
+      #flicker {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        position: absolute;
+        z-index: 10;
+      }
+      #f1 {
+        background-color: yellow;
+      }
+      #f2 {
+        background-color: red;
+      }
+      #f3 {
+        background-color: blue;
+      }
+      #f1,
+      #f2,
+      #f3 {
+        display: none;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+      }
+      h2 {
+        color: white;
+        text-align: center;
+        margin: 0;
+        filter: drop-shadow(0 0 10px #000000);
+        font-size: 200px;
+      }
+      h3 {
+        font-size: 120px;
+        position: absolute;
+        margin: 0;
+        left: 50vw;
+        top: 200px;
+        transform: translateX(-50%);
+        z-index: 20;
+        color: white;
+        filter: drop-shadow(0 0 10px #000000);
+      }
+      #topper {
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 5;
+        width: 100vw;
+        height: 350px;
+        background-color: white;
+        filter: drop-shadow(0 10px 20px #ffffff);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="flicker">
+      <div id="f1"><h2 id="flicker1">1 - 1</h2></div>
+      <div id="f2"><h2 id="flicker2">2 - 1</h2></div>
+      <div id="f3"><h2 id="flicker3">3 - 1</h2></div>
+    </div>
+    <div id="topper"></div>
+    <h3>지금 밥 먹으러 갈 반은</h3>
+
+    <div id="grade1">
+      <div id="wrapper1"></div>
+    </div>
+
+    <div id="grade2">
+      <div id="wrapper2"></div>
+    </div>
+
+    <div id="grade3">
+      <div id="wrapper3"></div>
+    </div>
+    <script src="/socket.io/socket.io.js" style="display: none"></script>
+
+    <script>
+      const socket = io("http://localhost:80");
+      let index = [1, 1, 1];
+      let wrappers = [
+        document.getElementById("wrapper1"),
+        document.getElementById("wrapper2"),
+        document.getElementById("wrapper3"),
+      ];
+
+      fetch(`http://localhost/getMaxClass`)
+        .then((response) => response.json())
+        .then((data) => {
+          for (var i = 0; i < data[0]; i++) {
+            const t = document.createElement("h1");
+            t.innerHTML = `1 - ${i + 1}`;
+            wrappers[0].appendChild(t);
+          }
+          for (var i = 0; i < data[1]; i++) {
+            const t = document.createElement("h1");
+            t.innerHTML = `2 - ${i + 1}`;
+            wrappers[1].appendChild(t);
+          }
+          for (var i = 0; i < data[2]; i++) {
+            const t = document.createElement("h1");
+            t.innerHTML = `3 - ${i + 1}`;
+            wrappers[2].appendChild(t);
+          }
+        });
+
+      fetch(`http://localhost/getClass`)
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById("flicker1").innerText = `1 - ${data[0]}`;
+          document.getElementById("flicker2").innerText = `2 - ${data[1]}`;
+          document.getElementById("flicker3").innerText = `3 - ${data[2]}`;
+        });
+
+      const flicker = document.getElementById("flicker");
+      Array.from(flicker.children).forEach((e) => {
+        e.style.display = "flex";
+        setTimeout(() => {
+          e.style.display = "none";
+        }, 4000);
+      });
+
+      socket.on("nowClass", (newIndex) => {
+        index = newIndex;
+        const texts = [
+          document.getElementById("flicker1"),
+          document.getElementById("flicker2"),
+          document.getElementById("flicker3"),
+        ];
+        // console.log(index);
+        for (var i = 0; i < 3; i++) {
+          wrappers[i].style.transform = `translateY(-${
+            (index[i] - 1) * 84 + 120
+          }px)`;
+          Array.from(wrappers[i].children).forEach((e) => {
+            e.classList.remove("now");
+          });
+          wrappers[i].children[index[i] - 1].classList.add("now");
+          texts[i].innerHTML = `${i + 1} - ${index[i]}`;
+          console.log(`${i}: ${i + 1} - ${index[i]}`);
+        }
+      });
+      const noti = [
+        new Audio("noti1.mp3"),
+        new Audio("noti2.mp3"),
+        new Audio("noti3.mp3"),
+      ];
+      socket.on("flicker", (i) => {
+        const flicker = document.getElementById("flicker");
+        noti[i].play();
+        flicker.children[i].style.display = "flex";
+        setTimeout(() => {
+          flicker.children[i].style.display = "none";
+        }, 4000);
+      });
+
+      var AudioContext;
+      var audioContext;
+
+      window.onload = function () {
+        navigator.mediaDevices
+          .getUserMedia({ audio: true })
+          .then(() => {
+            AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioContext = new AudioContext();
+          })
+          .catch((e) => {
+            console.error(`Audio permissions denied: ${e}`);
+          });
+      };
+    </script>
+  </body>
+</html>
