@@ -21,7 +21,7 @@ io.on("connection", (socket) => {
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
-  res.send("hello world!");
+  res.sendFile(__dirname + "/frontend/viewer.html");
 });
 
 app.get("/viewer", (req, res) => {
