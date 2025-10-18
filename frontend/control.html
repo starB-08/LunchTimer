@@ -40,7 +40,7 @@
 
     <script>
       window.addEventListener("load", (e) => {
-        fetch(process.env.URL + `/getClass`)
+        fetch(`/getClass`)
           .then((response) => response.json())
           .then((data) => {
             // console.log(data);
@@ -51,7 +51,7 @@
       });
 
       function next1() {
-        fetch(process.env.URL + `/nextClass/0`)
+        fetch(`/nextClass/0`)
           .then((response) => response.json())
           .then((data) => {
             // console.log(data);
@@ -61,7 +61,7 @@
           });
       }
       function next2() {
-        fetch(process.env.URL + `/nextClass/1`)
+        fetch(`/nextClass/1`)
           .then((response) => response.json())
           .then((data) => {
             // console.log(data);
@@ -71,7 +71,7 @@
           });
       }
       function next3() {
-        fetch(process.env.URL + `nextClass/2`)
+        fetch(`nextClass/2`)
           .then((response) => response.json())
           .then((data) => {
             // console.log(data);

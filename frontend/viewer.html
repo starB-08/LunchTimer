@@ -150,7 +150,7 @@
         document.getElementById("wrapper3"),
       ];
 
-      fetch(process.env.URL + `/getMaxClass`)
+      fetch(`/getMaxClass`)
         .then((response) => response.json())
         .then((data) => {
           for (var i = 0; i < data[0]; i++) {
@@ -170,7 +170,7 @@
           }
         });
 
-      fetch(process.env.URL + `/getClass`)
+      fetch(`/getClass`)
         .then((response) => response.json())
         .then((data) => {
           document.getElementById("flicker1").innerText = `1 - ${data[0]}`;
