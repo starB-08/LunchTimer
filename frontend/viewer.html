@@ -142,7 +142,7 @@
     <script src="/socket.io/socket.io.js" style="display: none"></script>
 
     <script>
-      const socket = io("http://localhost:80");
+      const socket = io("http://localhost:3000");
       let index = [1, 1, 1];
       let wrappers = [
         document.getElementById("wrapper1"),
@@ -150,7 +150,7 @@
         document.getElementById("wrapper3"),
       ];
 
-      fetch(`http://localhost/getMaxClass`)
+      fetch(`http://localhost:3000/getMaxClass`)
         .then((response) => response.json())
         .then((data) => {
           for (var i = 0; i < data[0]; i++) {
@@ -170,7 +170,7 @@
           }
         });
 
-      fetch(`http://localhost/getClass`)
+      fetch(`http://localhost:3000/getClass`)
         .then((response) => response.json())
         .then((data) => {
           document.getElementById("flicker1").innerText = `1 - ${data[0]}`;

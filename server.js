@@ -84,7 +84,7 @@ app.get("/getMaxClass", (req, res) => {
 
 server.listen(port, () => {
   console.log(`server is listening at localhost:${port}`);
-  fetch("http://localhost/read");
+  fetch("http://localhost:3000/read");
 });
 
 //----------------------------------------------------------//
