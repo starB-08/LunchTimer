@@ -10,7 +10,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server);
 
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3000;
 const dataPath = path.join(__dirname, "data", "data.json");
 
 io.on("connection", (socket) => {
