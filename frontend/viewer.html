@@ -221,6 +221,11 @@
         }, 4000);
       });
 
+      socket.on("playSound", (i) => {
+        const s = new Audio("noti.mp3");
+        s.play();
+      });
+
       var AudioContext;
       var audioContext;
 

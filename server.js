@@ -83,7 +83,7 @@ app.get("/getMaxClass", (req, res) => {
 });
 
 app.get("/playSound", (req, res) => {
-  new Audio(__dirname + "/public/noti.mp3").play();
+  io.emit("playSound", 0);
 });
 
 server.listen(port, () => {
