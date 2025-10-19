@@ -82,6 +82,10 @@ app.get("/getMaxClass", (req, res) => {
   res.send(maxClass);
 });
 
+app.get("/playSound", (req, res) => {
+  new Audio(__dirname + "/public/noti.mp3").play();
+});
+
 server.listen(port, () => {
   console.log(`server is listening at localhost:${port}`);
   fetch("http://localhost:3000/read");
