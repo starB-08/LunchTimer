@@ -39,12 +39,7 @@
     <button onclick="next2()">2학년 다음</button>
     <button onclick="next3()">3학년 다음</button>
 
-    <button onclick="reset()">반 리셋</button>
-
     <script>
-      function reset() {
-        fetch("/reset");
-      }
       function next1() {
         fetch(`/nextClass/0`)
           .then((response) => response.json())

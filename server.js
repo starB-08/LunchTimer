@@ -82,11 +82,6 @@ app.get("/getMaxClass", (req, res) => {
   res.send(maxClass);
 });
 
-app.get("/reset", (req, res) => {
-  nowClass = _data.firstClass;
-  io.emit("nowClass", nowClass);
-});
-
 server.listen(port, () => {
   console.log(`server is listening at localhost:${port}`);
   fetch("http://localhost:3000/read");
