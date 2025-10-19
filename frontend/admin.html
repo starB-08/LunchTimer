@@ -44,9 +44,9 @@
     <script>
       function sound() {
         fetch("/playSound")
-          .then((response) => response.json)
+          .then((response) => response.json())
           .then((data) => {
-            console.log("Alarmed!");
+            console.log(data);
           });
       }
       function next1() {
