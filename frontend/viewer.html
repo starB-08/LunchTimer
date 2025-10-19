@@ -224,6 +224,13 @@
       socket.on("playSound", (i) => {
         const s = new Audio("noti.mp3");
         s.play();
+        for (var i = 0; i < 3; i++) {
+          const flicker = document.getElementById("flicker");
+          flicker.children[i].style.display = "flex";
+          setTimeout(() => {
+            flicker.children[i].style.display = "none";
+          }, 4000);
+        }
       });
 
       var AudioContext;

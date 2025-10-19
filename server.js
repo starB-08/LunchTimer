@@ -84,7 +84,7 @@ app.get("/getMaxClass", (req, res) => {
 
 app.get("/playSound", (req, res) => {
   io.emit("playSound", 0);
-  res.send("DONE!");
+  res.json("{'m':'DONE!'}");
 });
 
 server.listen(port, () => {
