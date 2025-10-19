@@ -10,6 +10,7 @@
         width: 100vw;
         height: 100vh;
         overflow: hidden;
+        font-size: 1vw;
       }
       body {
         display: flex;
@@ -43,7 +44,7 @@
       }
 
       h1 {
-        font-size: 70px;
+        font-size: 4rem;
         opacity: 70%;
         margin: 0;
         transition: all 0.1s;
@@ -177,14 +178,6 @@
           document.getElementById("flicker2").innerText = `2 - ${data[1]}`;
           document.getElementById("flicker3").innerText = `3 - ${data[2]}`;
         });
-
-      const flicker = document.getElementById("flicker");
-      Array.from(flicker.children).forEach((e) => {
-        e.style.display = "flex";
-        setTimeout(() => {
-          e.style.display = "none";
-        }, 4000);
-      });
 
       socket.on("nowClass", (newIndex) => {
         index = newIndex;
