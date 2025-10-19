@@ -78,8 +78,8 @@
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
-            document.getElementById("a").value = data.classAmount;
-            document.getElementById("f").value = data.firstClass;
+            document.getElementById("a").value = "[" + data.classAmount + "]";
+            document.getElementById("f").value = "[" + data.firstClass + "]";
           });
       }
       function writeData() {
