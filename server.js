@@ -84,6 +84,7 @@ app.get("/getMaxClass", (req, res) => {
 
 app.get("/reset", (req, res) => {
   nowClass = _data.firstClass;
+  io.emit("nowClass");
 });
 
 server.listen(port, () => {
