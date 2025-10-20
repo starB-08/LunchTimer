@@ -151,6 +151,26 @@
         document.getElementById("wrapper3"),
       ];
 
+      index = newIndex;
+      console.log(`!!: ${newIndex}`);
+      const texts = [
+        document.getElementById("flicker1"),
+        document.getElementById("flicker2"),
+        document.getElementById("flicker3"),
+      ];
+      // console.log(index);
+      for (var i = 0; i < 3; i++) {
+        wrappers[i].style.transform = `translateY(-${
+          (index[i] - 1) * 84 + 120
+        }px)`;
+        Array.from(wrappers[i].children).forEach((e) => {
+          e.classList.remove("now");
+        });
+        wrappers[i].children[index[i] - 1].classList.add("now");
+        texts[i].innerHTML = `${i + 1} - ${index[i]}`;
+        console.log(`${i}: ${i + 1} - ${index[i]}`);
+      }
+
       fetch(`/getMaxClass`)
         .then((response) => response.json())
         .then((data) => {
