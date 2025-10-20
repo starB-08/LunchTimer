@@ -150,75 +150,68 @@
         document.getElementById("wrapper2"),
         document.getElementById("wrapper3"),
       ];
-
-      index = newIndex;
-      console.log(`!!: ${newIndex}`);
       const texts = [
         document.getElementById("flicker1"),
         document.getElementById("flicker2"),
         document.getElementById("flicker3"),
       ];
       // console.log(index);
-      for (var i = 0; i < 3; i++) {
-        wrappers[i].style.transform = `translateY(-${
-          (index[i] - 1) * 84 + 120
-        }px)`;
-        Array.from(wrappers[i].children).forEach((e) => {
-          e.classList.remove("now");
-        });
-        wrappers[i].children[index[i] - 1].classList.add("now");
-        texts[i].innerHTML = `${i + 1} - ${index[i]}`;
-        console.log(`${i}: ${i + 1} - ${index[i]}`);
-      }
 
       fetch(`/getMaxClass`)
         .then((response) => response.json())
-        .then((data) => {
+        .then((d) => {
+          data = d.max;
+          f = d.first;
+          console.log(data);
           for (var i = 0; i < data[0]; i++) {
             const t = document.createElement("h1");
-            t.innerHTML = `1 - ${i + 1}`;
+            ih = (f[0] + i - 1) % data[0];
+            t.innerHTML = `1 - ${ih + 1}`;
             wrappers[0].appendChild(t);
           }
           for (var i = 0; i < data[1]; i++) {
             const t = document.createElement("h1");
-            t.innerHTML = `2 - ${i + 1}`;
+            ih = (f[1] + i - 1) % data[1];
+            t.innerHTML = `2 - ${ih + 1}`;
             wrappers[1].appendChild(t);
           }
           for (var i = 0; i < data[2]; i++) {
             const t = document.createElement("h1");
-            t.innerHTML = `3 - ${i + 1}`;
+            ih = (f[2] + i - 1) % data[2];
+            t.innerHTML = `3 - ${ih + 1}`;
             wrappers[2].appendChild(t);
           }
         });
 
-      fetch(`/getClass`)
-        .then((response) => response.json())
-        .then((data) => {
-          document.getElementById("flicker1").innerText = `1 - ${data[0]}`;
-          document.getElementById("flicker2").innerText = `2 - ${data[1]}`;
-          document.getElementById("flicker3").innerText = `3 - ${data[2]}`;
-        });
-
       socket.on("nowClass", (newIndex) => {
-        index = newIndex;
-        console.log(`!!: ${newIndex}`);
+        fetch("/getIndex")
+          .then((response) => response.json())
+          .then((data) => (index = data));
+        console.log(`NEWINDEX: ${newIndex}`);
         const texts = [
           document.getElementById("flicker1"),
           document.getElementById("flicker2"),
           document.getElementById("flicker3"),
         ];
-        // console.log(index);
+        console.log(`index:${index}`);
         for (var i = 0; i < 3; i++) {
           wrappers[i].style.transform = `translateY(-${
-            (index[i] - 1) * 84 + 120
+            (newIndex[i] - 1) * 84 + 120
           }px)`;
           Array.from(wrappers[i].children).forEach((e) => {
             e.classList.remove("now");
           });
-          wrappers[i].children[index[i] - 1].classList.add("now");
-          texts[i].innerHTML = `${i + 1} - ${index[i]}`;
-          console.log(`${i}: ${i + 1} - ${index[i]}`);
+          wrappers[i].children.item(newIndex[i] - 1).classList.add("now");
+          texts[i].innerHTML = `${i + 1} - ${newIndex[i]}`;
+          console.log(`${i}: ${i + 1} - ${newIndex[i]}`);
         }
+        fetch(`/getClass`)
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("flicker1").innerText = `1 - ${data[0]}`;
+            document.getElementById("flicker2").innerText = `2 - ${data[1]}`;
+            document.getElementById("flicker3").innerText = `3 - ${data[2]}`;
+          });
       });
       const noti = [
         new Audio("noti1.mp3"),
@@ -228,9 +221,9 @@
       socket.on("flicker", (i) => {
         const flicker = document.getElementById("flicker");
         noti[i].play();
-        flicker.children[i].style.display = "flex";
+        flicker.children.item(i).style.display = "flex";
         setTimeout(() => {
-          flicker.children[i].style.display = "none";
+          flicker.children.item(i).style.display = "none";
         }, 4000);
       });
 

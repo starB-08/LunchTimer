@@ -11,11 +11,10 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const port = process.env.PORT || 3000;
-const dataPath = path.join(__dirname, "data", "data.json");
 
 io.on("connection", (socket) => {
   console.log("viewer connected:", socket.id);
-  socket.emit("nowClass", nowClass);
+  socket.emit("nowClass", classIndex);
 });
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -38,48 +37,46 @@ app.get("/admin", (req, res) => {
 
 app.get("/nextClass/:i", (req, res) => {
   const i = Number(req.params.i);
-  nowClass[i] += 1;
-  if (nowClass[i] > maxClass[i]) nowClass[i] = 1;
-  io.emit("nowClass", nowClass);
+  classIndex[i] += 1;
+  if (classIndex[i] > maxClass[i]) classIndex[i] = 1;
+  console.log(classIndex);
+  nowClass[i] = (firstClass[i] + classIndex[i] - 1) % maxClass[i];
+  if (nowClass[i] == 0) nowClass[i] = maxClass[i];
+
+  io.emit("nowClass", classIndex);
   io.emit("flicker", i);
   res.send(nowClass);
 });
 
 app.get("/getClass", (req, res) => {
+  for (var i = 0; i < 3; i++) {
+    nowClass[i] = (firstClass[i] + classIndex[i] - 1) % maxClass[i];
+    if (nowClass[i] == 0) nowClass[i] = maxClass[i];
+  }
   res.send(nowClass);
 });
 
-app.get("/read", (req, res) => {
-  fs.readFile(dataPath, "utf8", (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    try {
-      _data = JSON.parse(data);
-      nowClass = _data.firstClass;
-      maxClass = _data.classAmount;
-      res.json(_data);
-    } catch (parseErr) {
-      console.error("JSON 파싱 오류:", parseErr);
-      res.status(500).json({ error: "JSON 형식이 잘못되었습니다." });
-    }
-  });
+app.get("/read", async (req, res) => {
+  const response = await fetch("http://127.0.0.1:4000/read");
+  const data = await response.json();
+
+  _data = data;
+  firstClass = _data.firstClass;
+  maxClass = _data.classAmount;
+
+  console.log(`1: ${JSON.stringify(_data)} / ${firstClass} / ${maxClass}`);
 });
 
 app.get("/write/:v", (req, res) => {
   const value = req.params.v;
   console.log(value);
-  fs.writeFile(dataPath, value, (err) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-  });
+  fetch(`http://127.0.0.1:4000/write/${value}`)
+    .then((response) => response.json())
+    .then((data) => {});
 });
 
 app.get("/getMaxClass", (req, res) => {
-  res.send(maxClass);
+  res.json(JSON.parse(`{"max":[${maxClass}], "first":[${firstClass}]}`));
 });
 
 app.get("/playSound", (req, res) => {
@@ -87,13 +84,23 @@ app.get("/playSound", (req, res) => {
   res.json("{'m':'DONE!'}");
 });
 
+app.get("/getIndex", (req, res) => {
+  res.send(classIndex);
+});
+
 server.listen(port, () => {
   console.log(`server is listening at localhost:${port}`);
-  fetch("http://localhost:3000/read");
+  fetch(`http://127.0.0.1:3000/read`)
+    .then((response) => response.json())
+    .then((data) => {
+      //   console.log(data);
+    });
 });
 
 //----------------------------------------------------------//
 
-let _data = JSON.parse('{ "classAmount": [10,10,13], "firstClass": [1,1,1] }');
+let _data = JSON.parse("{}");
 let nowClass = [1, 1, 1];
+let classIndex = [1, 1, 1];
+let firstClass = [1, 1, 1];
 let maxClass = [10, 10, 13];
