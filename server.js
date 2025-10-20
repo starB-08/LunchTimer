@@ -67,6 +67,7 @@ app.get("/read", async (req, res) => {
   maxClass = _data.classAmount;
 
   console.log(`1: ${JSON.stringify(_data)} / ${firstClass} / ${maxClass}`);
+  res.json(_data);
 });
 
 app.get("/write/:v", (req, res) => {
