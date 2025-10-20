@@ -57,7 +57,9 @@ app.get("/getClass", (req, res) => {
 });
 
 app.get("/read", async (req, res) => {
-  const response = await fetch("http://127.0.0.1:4000/read");
+  const response = await fetch(
+    "https://port-0-lunchtimerdb-mgwvf8ly06fa2d51.sel3.cloudtype.app/read"
+  );
   const data = await response.json();
 
   _data = data;
@@ -70,7 +72,9 @@ app.get("/read", async (req, res) => {
 app.get("/write/:v", (req, res) => {
   const value = req.params.v;
   console.log(value);
-  fetch(`http://127.0.0.1:4000/write/${value}`)
+  fetch(
+    `https://port-0-lunchtimerdb-mgwvf8ly06fa2d51.sel3.cloudtype.app/write/${value}`
+  )
     .then((response) => response.json())
     .then((data) => {});
 });
