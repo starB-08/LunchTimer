@@ -49,7 +49,10 @@
         margin: 0;
         transition: all 0.1s;
         color: gray;
-        filter: drop-shadow(0 0 10px #88888888);
+        text-shadow: 0 0 10px #888;
+        display: inline-block;
+        vertical-align: baseline;
+        line-height: 1;
       }
       h1.now {
         font-size: 11rem;
@@ -143,6 +146,8 @@
     <script src="/socket.io/socket.io.js" style="display: none"></script>
 
     <script>
+      console.log(window.innerWidth);
+
       const socket = io();
       let index = [1, 1, 1];
       let wrappers = [
@@ -196,8 +201,8 @@
         console.log(`index:${index}`);
         for (var i = 0; i < 3; i++) {
           wrappers[i].style.transform = `translateY(-${
-            (newIndex[i] - 1) * 84 + 120
-          }px)`;
+            (newIndex[i] - 1) * 4 + 5.5
+          }rem)`;
           Array.from(wrappers[i].children).forEach((e) => {
             e.classList.remove("now");
           });
