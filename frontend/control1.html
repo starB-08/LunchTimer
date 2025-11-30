@@ -79,9 +79,14 @@
       }
 
       socket.on("nowClass", (newIndex) => {
-        document.getElementById(
-          "sound"
-        ).innerText = `1학년: ${newIndex[0]}반 \n2학년: ${newIndex[1]}반 \n3학년: ${newIndex[2]}반`;
+        fetch(`/getClass`)
+          .then((response) => response.json())
+          .then((data) => {
+            // console.log(data);
+            document.getElementById(
+              "sound"
+            ).innerText = `1학년: ${data[0]}반 \n2학년: ${data[1]}반 \n3학년: ${data[2]}반`;
+          });
       });
     </script>
   </body>

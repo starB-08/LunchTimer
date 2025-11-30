@@ -79,6 +79,7 @@ app.get("/getClass", (req, res) => {
     if (nowClass[i] == 0) nowClass[i] = maxClass[i];
   }
   res.send(nowClass);
+  console.log(nowClass);
 });
 
 app.get("/read", async (req, res) => {
@@ -105,6 +106,7 @@ app.get("/write/:v", (req, res) => {
   classIndex = [1, 1, 1];
   firstClass = first;
   maxClass = amount;
+  nowClass = first;
 
   const forParse = JSON.stringify({
     "classAmount": maxClass,
@@ -113,7 +115,7 @@ app.get("/write/:v", (req, res) => {
   _data = JSON.parse(forParse);
 
   console.log(`asdf: ${classIndex}`);
-  io.emit("nowClass", classIndex);
+  io.emit("nowClass", nowClass);
   fetch(
     `https://port-0-lunchtimerdb-mgwvf8ly06fa2d51.sel3.cloudtype.app/write/${value}`
   )
