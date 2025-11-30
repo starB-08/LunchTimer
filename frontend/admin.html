@@ -41,6 +41,7 @@
 
     <button onclick="sound()">알림</button>
 
+    <script src="/socket.io/socket.io.js" style="display: none"></script>
     <script>
       window.addEventListener("load", (e) => {
         fetch(`/getClass`)
@@ -120,6 +121,13 @@
 
         fetch(`/write/${result}`);
       }
+
+      const socket = io();
+      socket.on("nowClass", (newIndex) => {
+        document.getElementById(
+          "sound"
+        ).innerText = `1학년: ${newIndex[0]}반 \n2학년: ${newIndex[1]}반 \n3학년: ${newIndex[2]}반`;
+      });
     </script>
   </body>
 </html>

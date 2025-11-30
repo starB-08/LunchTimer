@@ -13,7 +13,7 @@ const io = new Server(server);
 const port = process.env.PORT || 3000;
 
 io.on("connection", (socket) => {
-  console.log("viewer connected:", socket.id);
+  // console.log("viewer connected:", socket.id);
   socket.emit("nowClass", classIndex);
 });
 
@@ -31,6 +31,18 @@ app.get("/control", (req, res) => {
   res.sendFile(__dirname + "/frontend/control.html");
 });
 
+app.get("/control1", (req, res) => {
+  res.sendFile(__dirname + "/frontend/control1.html");
+});
+
+app.get("/control2", (req, res) => {
+  res.sendFile(__dirname + "/frontend/control2.html");
+});
+
+app.get("/control3", (req, res) => {
+  res.sendFile(__dirname + "/frontend/control3.html");
+});
+
 app.get("/admin", (req, res) => {
   res.sendFile(__dirname + "/frontend/admin.html");
 });
@@ -39,12 +51,25 @@ app.get("/nextClass/:i", (req, res) => {
   const i = Number(req.params.i);
   classIndex[i] += 1;
   if (classIndex[i] > maxClass[i]) classIndex[i] = 1;
-  console.log(classIndex);
+  // console.log(classIndex);
   nowClass[i] = (firstClass[i] + classIndex[i] - 1) % maxClass[i];
   if (nowClass[i] == 0) nowClass[i] = maxClass[i];
 
   io.emit("nowClass", classIndex);
   io.emit("flicker", i);
+  res.send(nowClass);
+});
+
+app.get("/prevClass/:i", (req, res) => {
+  const i = Number(req.params.i);
+  classIndex[i] -= 1;
+  if (classIndex[i] <= 0) classIndex[i] = maxClass[i];
+  // console.log(classIndex);
+  nowClass[i] = (firstClass[i] + classIndex[i] - 1) % maxClass[i];
+  if (nowClass[i] == 0) nowClass[i] = maxClass[i];
+
+  io.emit("nowClass", classIndex);
+  // io.emit("flicker", i);
   res.send(nowClass);
 });
 
@@ -66,13 +91,29 @@ app.get("/read", async (req, res) => {
   firstClass = _data.firstClass;
   maxClass = _data.classAmount;
 
-  console.log(`1: ${JSON.stringify(_data)} / ${firstClass} / ${maxClass}`);
+  // console.log(`1: ${JSON.stringify(_data)} / ${firstClass} / ${maxClass}`);
   res.json(_data);
 });
 
 app.get("/write/:v", (req, res) => {
   const value = req.params.v;
-  console.log(value);
+  // console.log(value);
+
+  const valueJson = JSON.parse(value);
+  const amount = valueJson.classAmount;
+  const first = valueJson.firstClass;
+  classIndex = [1, 1, 1];
+  firstClass = first;
+  maxClass = amount;
+
+  const forParse = JSON.stringify({
+    "classAmount": maxClass,
+    "firstClass": firstClass,
+  });
+  _data = JSON.parse(forParse);
+
+  console.log(`asdf: ${classIndex}`);
+  io.emit("nowClass", classIndex);
   fetch(
     `https://port-0-lunchtimerdb-mgwvf8ly06fa2d51.sel3.cloudtype.app/write/${value}`
   )
