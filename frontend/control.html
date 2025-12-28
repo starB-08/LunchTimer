@@ -14,7 +14,7 @@
         flex-direction: column;
         align-items: center;
       }
-      #buttons {
+      .buttons {
         width: 100vw;
         display: flex;
         flex-direction: row;
@@ -37,7 +37,13 @@
   </head>
   <body>
     <h1 id="sound">현재 반: 1반, 1반, 1반</h1>
-    <div id="buttons">
+
+    <div class="buttons">
+      <button onclick="prev1()">1학년 이전</button>
+      <button onclick="prev2()">2학년 이전</button>
+      <button onclick="prev3()">3학년 이전</button>
+    </div>
+    <div class="buttons">
       <button onclick="next1()">1학년 다음</button>
       <button onclick="next2()">2학년 다음</button>
       <button onclick="next3()">3학년 다음</button>
@@ -78,6 +84,37 @@
       }
       function next3() {
         fetch(`nextClass/2`)
+          .then((response) => response.json())
+          .then((data) => {
+            // console.log(data);
+            document.getElementById(
+              "sound"
+            ).innerText = `1학년: ${data[0]}반 \n2학년: ${data[1]}반 \n3학년: ${data[2]}반`;
+          });
+      }
+
+      function prev1() {
+        fetch(`/prevClass/0`)
+          .then((response) => response.json())
+          .then((data) => {
+            // console.log(data);
+            document.getElementById(
+              "sound"
+            ).innerText = `1학년: ${data[0]}반 \n2학년: ${data[1]}반 \n3학년: ${data[2]}반`;
+          });
+      }
+      function prev2() {
+        fetch(`/prevClass/1`)
+          .then((response) => response.json())
+          .then((data) => {
+            // console.log(data);
+            document.getElementById(
+              "sound"
+            ).innerText = `1학년: ${data[0]}반 \n2학년: ${data[1]}반 \n3학년: ${data[2]}반`;
+          });
+      }
+      function prev3() {
+        fetch(`/prevClass/2`)
           .then((response) => response.json())
           .then((data) => {
             // console.log(data);
